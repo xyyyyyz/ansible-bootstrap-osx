@@ -18,3 +18,4 @@ python3 -m pip install --upgrade pip
 pip3 install ansible
 
 ansible-galaxy install -r requirements.yml
+ansible-playbook playbook.yml -i hosts --ask-become-pass -vv
