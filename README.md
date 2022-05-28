@@ -8,3 +8,12 @@ use `install.sh` to ensure dependencies are installed
 
 ## Ansible
 
+### NVM to manage Node
+
+### Brew
+
+#### Java
+
+Configure java with tasks that add it to path
+
+#### asdf
