@@ -26,3 +26,9 @@
         line: 'export CPPFLAGS="-I/usr/local/opt/openjdk/include"'
         state: present
         backup: yes
+    - name: "Add asdf to profile"
+      lineinfile:
+        path: ~/.profile
+        line: '. /usr/local/opt/asdf/libexec/asdf.sh'
+        state: present
+        backup: yes
