@@ -1,34 +1,6 @@
 ---
 - hosts: all
   roles:
-    - role: stephdewit.nvm
-      nvm_version: 'latest'
-      nvm_node_version: 'lts/fermium'
-    - role: geerlingguy.homebrew
-      homebrew_installed_packages: 
-        - asdf
-        - java
-
-  tasks:
-    - name: "Add java wrappers for jdk"
-      command: 'sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk'
-      args:
-        creates: /Library/Java/JavaVirtualMachines/openjdk.jdk
-    - name: "Add java jdk to profile"
-      lineinfile:
-        path: ~/.profile
-        line: 'export PATH="/usr/local/opt/openjdk/bin:$PATH"'
-        state: present
-        backup: yes
-    - name: "Add java jdk flags for C"
-      lineinfile:
-        path: ~/.profile
-        line: 'export CPPFLAGS="-I/usr/local/opt/openjdk/include"'
-        state: present
-        backup: yes
-    - name: "Add asdf to profile"
-      lineinfile:
-        path: ~/.profile
-        line: '. /usr/local/opt/asdf/libexec/asdf.sh'
-        state: present
-        backup: yes
+    - node
+    - common
+    - infra

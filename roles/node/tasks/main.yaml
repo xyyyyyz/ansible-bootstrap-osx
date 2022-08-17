@@ -1,0 +1,5 @@
+- ansible.builtin.import_role: 
+    name: stephdewit.nvm
+  vars:
+    nvm_version: 'latest'
+    nvm_node_version: 'lts/fermium'

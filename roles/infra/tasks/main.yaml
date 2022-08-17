@@ -1,0 +1,15 @@
+- ansible.builtin.import_role: 
+    name: geerlingguy.homebrew
+  vars:
+    homebrew_cask_apps:
+      - session-manager-plugin
+    homebrew_installed_packages: 
+      - awscli
+      - weaveworks/tap/eksctl
+      - openssl
+- name: "Openssl path to profile"
+  lineinfile:
+    path: ~/.profile
+    line: 'export PATH="/usr/local/opt/openssl@3/bin:$PATH"'
+    state: present
+    backup: yes

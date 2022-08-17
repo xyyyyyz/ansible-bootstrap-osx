@@ -1,0 +1,113 @@
+- ansible.builtin.import_role: 
+    name: geerlingguy.homebrew
+  vars:
+    homebrew_cask_apps:
+      - visual-studio-code
+      - iterm2
+    homebrew_installed_packages: 
+      - asdf
+      - java
+      - kubectl
+      - weaveworks/tap/eksctl
+      - watch
+      - tree
+      - docker
+      - colima
+      - go
+      - jq
+- ansible.builtin.import_role: 
+    name: vaulttec.zsh
+  vars:
+    zsh_ohmy_theme: random
+    zsh_ohmy_custom_plugins:
+      - name: zsh-syntax-highlighting
+        repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+      - name: zsh-autosuggestions
+        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+    zsh_ohmy_plugins:
+      - git
+      - git-extras
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+- name: "Add java wrappers for jdk"
+  command: 'sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk'
+  args:
+    creates: /Library/Java/JavaVirtualMachines/openjdk.jdk
+- name: "Add python bin to profile"
+  lineinfile:
+    path: ~/.profile
+    line: 'export PATH=$PATH:~/Library/Python/3.8/bin'
+    state: present
+    backup: yes
+- name: "Add java jdk to profile"
+  lineinfile:
+    path: ~/.profile
+    line: 'export PATH="/usr/local/opt/openjdk/bin:$PATH"'
+    state: present
+    backup: yes
+- name: "Add java jdk flags for C"
+  lineinfile:
+    path: ~/.profile
+    line: 'export CPPFLAGS="-I/usr/local/opt/openjdk/include"'
+    state: present
+    backup: yes
+- name: "Add direnv to profile"
+  lineinfile:
+    path: ~/.profile
+    line: 'eval "$(direnv hook zsh)"'
+    backup: yes
+- name: "Hook asdf"
+  lineinfile:
+    path: ~/.profile
+    line: '. $(brew --prefix asdf)/libexec/asdf.sh'
+    backup: yes
+- name: "Allow dot files to be visible"
+  ansible.builtin.shell: defaults write com.apple.Finder AppleShowAllFiles true
+- name: "Verify some empty files"
+  file: 
+    path: "{{ item }}"
+    state: touch
+  with_items:
+    - ~/.gitconfig
+    - ~/.gitignore
+- name: "Configure Git"
+  ansible.builtin.blockinfile:
+    path: ~/.gitconfig
+    block: |
+      [user]
+        email = jameskohyz@gmail.com
+        name = James Koh
+      [core]
+        excludesfile = ~/.gitignore
+- name: "Standard gitignore"
+  ansible.builtin.blockinfile:
+    path: ~/.gitignore
+    block: |
+      # Node
+      npm-debug.log
+
+      # Mac
+      .DS_Store
+
+      # WebStorm
+      .idea/
+
+      # VScode
+      .vsc
+
+      # vi
+      *~
+
+      # General
+      log/
+      *.log
+- name: "Add alias to install profiles for aasdf"
+  lineinfile:
+    path: ~/.profile
+    line: alias asdf-install-plugins="cat ~/.tool-versions | cut -d' ' -f1 | grep '^[^\#]' | xargs -I {} sh -c 'asdf plugin add {} || true'"
+    backup: yes
+- name: "Add .profile to .zshrc"
+  lineinfile:
+    path: ~/.zshrc
+    line: source ~/.profile
+    backup: yes
