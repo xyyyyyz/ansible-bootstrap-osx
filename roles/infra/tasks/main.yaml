@@ -7,6 +7,7 @@
       - awscli
       - weaveworks/tap/eksctl
       - openssl
+      - skopeo
 - name: "Openssl path to profile"
   lineinfile:
     path: ~/.profile
