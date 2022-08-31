@@ -1,6 +1,12 @@
 ---
 - hosts: all
   roles:
-    - node
-    - common
-    - infra
+    - role: node
+      tags:
+        - node
+    - role: common
+      tags:
+        - common
+    - role: infra
+      tags:
+        - infra

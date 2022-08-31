@@ -21,4 +21,4 @@ touch ~/.profile
 export PATH=$PATH:~/Library/Python/3.8/bin
 
 ansible-galaxy install -r requirements.yml
-ansible-playbook playbook.yml -i hosts --ask-become-pass -vv
+ansible-playbook playbook.yml -i hosts --ask-become-pass -vv --tags $1
