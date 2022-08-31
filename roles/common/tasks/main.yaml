@@ -8,6 +8,7 @@
       - asdf
       - java
       - kubectl
+      - krew
       - weaveworks/tap/eksctl
       - watch
       - tree
@@ -75,7 +76,7 @@
     path: ~/.gitconfig
     block: |
       [user]
-        email = jameskohyz@gmail.com
+        email = ext.james.koh@grabtaxi.com
         name = James Koh
       [core]
         excludesfile = ~/.gitignore
@@ -110,4 +111,9 @@
   lineinfile:
     path: ~/.zshrc
     line: source ~/.profile
+    backup: yes
+- name: "Add Krew plugins"
+  lineinfile:
+    path: ~/.profile
+    line: export PATH="${PATH}:${HOME}/.krew/bin"
     backup: yes
