@@ -19,6 +19,7 @@
       - pre-commit
       - gawk
       - coreutils
+      - yq
 - ansible.builtin.import_role: 
     name: vaulttec.zsh
   vars:
