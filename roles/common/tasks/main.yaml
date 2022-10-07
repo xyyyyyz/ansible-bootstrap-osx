@@ -16,6 +16,9 @@
       - colima
       - go
       - jq
+      - pre-commit
+      - gawk
+      - coreutils
 - ansible.builtin.import_role: 
     name: vaulttec.zsh
   vars:
