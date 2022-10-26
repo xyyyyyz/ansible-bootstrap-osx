@@ -1,0 +1,16 @@
+- ansible.builtin.import_role: 
+    name: geerlingguy.homebrew
+  vars:
+    homebrew_installed_packages: 
+      - kubectl
+      - krew
+      - weaveworks/tap/eksctl
+      - docker
+      - colima
+      - kubectx
+      - fzf
+- name: "Add Krew plugins"
+  lineinfile:
+    path: ~/.profile
+    line: export PATH="${PATH}:${HOME}/.krew/bin"
+    backup: yes

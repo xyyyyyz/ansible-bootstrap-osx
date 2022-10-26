@@ -7,13 +7,8 @@
     homebrew_installed_packages: 
       - asdf
       - java
-      - kubectl
-      - krew
-      - weaveworks/tap/eksctl
       - watch
       - tree
-      - docker
-      - colima
       - go
       - jq
       - pre-commit
@@ -115,9 +110,4 @@
   lineinfile:
     path: ~/.zshrc
     line: source ~/.profile
-    backup: yes
-- name: "Add Krew plugins"
-  lineinfile:
-    path: ~/.profile
-    line: export PATH="${PATH}:${HOME}/.krew/bin"
     backup: yes
