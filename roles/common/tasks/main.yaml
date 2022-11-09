@@ -15,6 +15,7 @@
       - gawk
       - coreutils
       - yq
+      - fzf
 - ansible.builtin.import_role: 
     name: vaulttec.zsh
   vars:
@@ -111,3 +112,9 @@
     path: ~/.zshrc
     line: source ~/.profile
     backup: yes
+- name: "Check fzf"
+  shell: grep -c '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' ~/.zshrc || true
+  register: test_fzf
+- name: "Install fzf"
+  shell: $(brew --prefix)/opt/fzf/install
+  when: test_fzf.stdout == "0"
