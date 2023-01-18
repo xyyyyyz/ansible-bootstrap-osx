@@ -6,7 +6,6 @@
       - iterm2
     homebrew_installed_packages: 
       - asdf
-      - java
       - watch
       - tree
       - go

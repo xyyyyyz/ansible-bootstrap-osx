@@ -13,3 +13,6 @@
     - role: infra
       tags:
         - infra
+    - role: java
+      tags:
+        - java

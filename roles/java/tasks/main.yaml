@@ -1,0 +1,7 @@
+- ansible.builtin.import_role: 
+    name: geerlingguy.homebrew
+  vars:
+    homebrew_cask_apps:
+      - intellij-idea
+    homebrew_installed_packages: 
+      - java
