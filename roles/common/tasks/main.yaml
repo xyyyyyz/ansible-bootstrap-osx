@@ -76,7 +76,7 @@
     path: ~/.gitconfig
     block: |
       [user]
-        email = ext.james.koh@grabtaxi.com
+        email = james.koh@thoughtworks.com
         name = James Koh
       [core]
         excludesfile = ~/.gitignore
