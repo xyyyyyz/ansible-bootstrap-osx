@@ -1,23 +1,90 @@
 - ansible.builtin.import_role: 
     name: geerlingguy.homebrew
   vars:
-    homebrew_cask_apps:
-      - intellij-idea
     homebrew_installed_packages: 
-      - java
-- name: "Add java jdk to profile"
-  lineinfile:
+      - gnu-tar
+
+- ansible.builtin.import_role: 
+    name: ansible-role-graalvm
+  vars:
+    # specify the underlying java version
+    # 11 or 17 or 19
+    graalvm_java_version: '17'
+
+    # GraalVM version number
+    graalvm_version: '22.3.0'
+
+    # Base installation directory for any GraalVM distribution
+    graalvm_install_dir: /opt/graalvm
+
+    # Directory to store files downloaded for GraalVM installation on the remote box
+    # graalvm_download_dir: "{{ x_ansible_download_dir | default(ansible_env.HOME + '/.ansible/tmp/downloads') }}"
+
+    # If this is the default installation, profile scripts will be written to set
+    # the GRAALVM_HOME environment variable
+    graalvm_is_default_installation: false
+
+    # If this graalvm bin director should be add to PATH environment variable
+    # Effect is only when this is also the default installation
+    graalvm_add_to_path: true
+
+    # Location GraalVM installations packages can be found on the local box
+    # local packages will be uses in preference to downloading new packages.
+    # graalvm_local_archive_dir: '{{ playbook_dir }}/files'
+
+    # Wether to use installation packages in the local archive (if available)
+    # graalvm_use_local_archive: true
+
+    # The SHA-256 for the GraalVM redistributable
+    graalvm_redis_sha256sum: 422cd6abecfb8b40238460c09c42c5a018cb92fab4165de9691be2e3c3d0e8d1
+
+    # location for GraalVM download (e.g. https://example.com/provisioning/files)
+    # specify only when NOT downloading from directly github
+    graalvm_redis_mirror: "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-{{ graalvm_version }}"
+
+    # File name for the GraalVM redistributable installation file
+    graalvm_redis_filename: graalvm-ce-java17-darwin-amd64-22.3.0.tar.gz
+
+    # Name of the group of Ansible facts relating this GraalVM installation.
+    #
+    # Override if you want use this role more than once to install multiple versions
+    # of GraalVM.
+    #
+    # e.g. graalvm_fact_group_name: graalvm_19.3
+    # would change the GraalVM home fact to:
+    # ansible_local.graalvm_19.3.general.home
+    graalvm_fact_group_name: graalvm
+
+    # Timeout for GraalVM download response in seconds
+    graalvm_download_timeout_seconds: 600
+
+    # choose the underlying architecture, amd64 or arch64
+    graalvm_architecture: amd64
+
+- name: Creates JavaVirtualMachines
+  become: yes
+  file:
+    path: /Library/Java/JavaVirtualMachines
+    state: directory
+    owner: root
+    mode: 0775
+    recurse: yes
+
+- name: Link to JavaVirtualMachines
+  become: yes
+  ansible.builtin.file:
+    state: link
+    dest: /Library/Java/JavaVirtualMachines/graalvm-ce
+    src: "{{ graalvm_install_dir }}/graalvm-{{ graalvm_version }}-java{{ graalvm_java_version }}"
+
+- name: Export to Path
+  ansible.builtin.lineinfile:
     path: ~/.profile
-    line: 'export PATH="/usr/local/opt/openjdk/bin:$PATH"'
-    state: present
+    line: 'export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce/Contents/Home/bin:$PATH'
     backup: yes
-- name: "Add java wrappers for jdk"
-  command: 'sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk'
-  args:
-    creates: /Library/Java/JavaVirtualMachines/openjdk.jdk
-- name: "Add java jdk flags for C"
-  lineinfile:
+
+- name: Set JAVA_HOME
+  ansible.builtin.lineinfile:
     path: ~/.profile
-    line: 'export CPPFLAGS="-I/usr/local/opt/openjdk/include"'
-    state: present
+    line: 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce/Contents/Home'
     backup: yes

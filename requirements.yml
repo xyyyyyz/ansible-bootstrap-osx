@@ -1,3 +1,4 @@
 - src: stephdewit.nvm
 - src: geerlingguy.homebrew
 - src: vaulttec.zsh
+- src: https://github.com/xyz-tw/ansible-role-graalvm
