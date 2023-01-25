@@ -16,3 +16,6 @@
     - role: java
       tags:
         - java
+    - role: beach
+      tags:
+        - beach
