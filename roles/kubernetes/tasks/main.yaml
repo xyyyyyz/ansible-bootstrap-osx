@@ -13,3 +13,15 @@
     path: ~/.profile
     line: export PATH="${PATH}:${HOME}/.krew/bin"
     backup: yes
+- name: Colima as docker.sock
+  become: yes
+  ansible.builtin.file:
+    state: link
+    src: ~/.colima/default/docker.sock
+    dest: /var/run/docker.sock
+    force: yes
+- name: Colima as DOCKER_HOST
+  ansible.builtin.lineinfile:
+    path: ~/.profile
+    line: 'export DOCKER_HOST="unix://${HOME}/.colima/default/docker.sock"'
+    backup: yes
