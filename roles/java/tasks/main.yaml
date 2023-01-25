@@ -5,3 +5,19 @@
       - intellij-idea
     homebrew_installed_packages: 
       - java
+- name: "Add java jdk to profile"
+  lineinfile:
+    path: ~/.profile
+    line: 'export PATH="/usr/local/opt/openjdk/bin:$PATH"'
+    state: present
+    backup: yes
+- name: "Add java wrappers for jdk"
+  command: 'sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk'
+  args:
+    creates: /Library/Java/JavaVirtualMachines/openjdk.jdk
+- name: "Add java jdk flags for C"
+  lineinfile:
+    path: ~/.profile
+    line: 'export CPPFLAGS="-I/usr/local/opt/openjdk/include"'
+    state: present
+    backup: yes
