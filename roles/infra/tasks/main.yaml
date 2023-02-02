@@ -8,6 +8,7 @@
       - weaveworks/tap/eksctl
       - openssl
       - skopeo
+      - aws-cdk
 - name: "Openssl path to profile"
   lineinfile:
     path: ~/.profile
