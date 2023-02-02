@@ -1,0 +1,10 @@
+plugins:
+  - name: Save Actions
+    url: https://plugins.jetbrains.com/plugin/download?rel=true&updateId=148803
+    checksum: sha256:30b1b0ac357d17eff8f65ef2f6a7fcbf0f332d816419e755b3e9b0804aedd817
+    extension: jar
+  - name: Google Java Format
+    url: https://plugins.jetbrains.com/plugin/download?rel=true&updateId=161816
+    checksum: sha256:31643239dff56b7240894ec967ead97234f4e7cca7c49f907ff9daf420725e81
+    created_file: lib/google-java-format-1.15.0.jar
+    extension: zip

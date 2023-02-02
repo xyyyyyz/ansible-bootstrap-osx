@@ -1,0 +1,37 @@
+- ansible.builtin.import_role:
+    name: geerlingguy.homebrew
+  vars:
+    homebrew_cask_apps:
+      - intellij-idea
+
+- name: Creates Plugin dir
+  file:
+    path: "~/Library/Application Support/JetBrains/IntelliJIdea2022.3/plugins"
+    state: directory
+    recurse: yes
+
+- name: "Download Plugins"
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "~/.ansible/tmp/downloads/{{ item.name }}.{{ item.extension }}"
+    checksum: "{{ item.checksum }}"
+    force: no
+    timeout: "60"
+    mode: "0777"
+  loop: "{{ plugins }}"
+
+- name: "Install archived Plugins"
+  ansible.builtin.unarchive:
+    src: "~/.ansible/tmp/downloads/{{ item.name }}.{{ item.extension }}"
+    dest: "~/Library/Application Support/JetBrains/IntelliJIdea2022.3/plugins"
+    creates: "~/Library/Application Support/JetBrains/IntelliJIdea2022.3/plugins/{{ item.name }}/{{ item.created_file }}"
+    copy: no
+  loop: "{{ plugins }}"
+  when: item.extension == "tar.gz" or item.extension == "zip"
+
+- name: "Install jar Plugins"
+  ansible.builtin.copy:
+    src: "~/.ansible/tmp/downloads/{{ item.name }}.{{ item.extension }}"
+    dest: "~/Library/Application Support/JetBrains/IntelliJIdea2022.3/plugins/{{ item.name }}.{{ item.extension }}"
+  loop: "{{ plugins }}"
+  when: item.extension == "jar"

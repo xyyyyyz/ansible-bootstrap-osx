@@ -19,3 +19,6 @@
     - role: beach
       tags:
         - beach
+    - role: intellij
+      tags:
+        - intellij
