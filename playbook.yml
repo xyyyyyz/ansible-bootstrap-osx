@@ -24,3 +24,6 @@
     - role: intellij
       tags:
         - intellij
+    - role: android
+      tags:
+        - android
