@@ -2,4 +2,4 @@
     name: stephdewit.nvm
   vars:
     nvm_version: 'latest'
-    nvm_node_version: 'lts/gallium'
+    nvm_node_version: 'lts/hydrogen'
