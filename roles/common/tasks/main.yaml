@@ -1,10 +1,10 @@
-- ansible.builtin.import_role: 
+- ansible.builtin.import_role:
     name: geerlingguy.homebrew
   vars:
     homebrew_cask_apps:
       - visual-studio-code
       - iterm2
-    homebrew_installed_packages: 
+    homebrew_installed_packages:
       - direnv
       - asdf
       - watch
@@ -16,7 +16,7 @@
       - coreutils
       - yq
       - fzf
-- ansible.builtin.import_role: 
+- ansible.builtin.import_role:
     name: vaulttec.zsh
   vars:
     zsh_ohmy_theme: random
@@ -33,7 +33,7 @@
 - name: "Add python bin to profile"
   lineinfile:
     path: ~/.profile
-    line: 'export PATH=$PATH:~/Library/Python/3.8/bin'
+    line: "export PATH=$PATH:~/Library/Python/3.8/bin"
     state: present
     backup: yes
 - name: "Add direnv to profile"
@@ -44,12 +44,12 @@
 - name: "Hook asdf"
   lineinfile:
     path: ~/.profile
-    line: '. $(brew --prefix asdf)/libexec/asdf.sh'
+    line: ". $(brew --prefix asdf)/libexec/asdf.sh"
     backup: yes
 - name: "Allow dot files to be visible"
   ansible.builtin.shell: defaults write com.apple.Finder AppleShowAllFiles true
 - name: "Verify some empty files"
-  file: 
+  file:
     path: "{{ item }}"
     state: touch
   with_items:
@@ -60,8 +60,8 @@
     path: ~/.gitconfig
     block: |
       [user]
-        email = james.koh@thoughtworks.com
-        name = James Koh
+        email = {{ git.email }}
+        name = {{ git.name }}
       [core]
         excludesfile = ~/.gitignore
 - name: "Standard gitignore"

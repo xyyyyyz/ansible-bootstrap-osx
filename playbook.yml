@@ -5,6 +5,8 @@
       tags:
         - node
     - role: common
+      vars_files:
+        - config.yml
       tags:
         - common
     - role: kubernetes
