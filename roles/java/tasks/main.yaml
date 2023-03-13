@@ -1,18 +1,18 @@
-- ansible.builtin.import_role: 
+- ansible.builtin.import_role:
     name: geerlingguy.homebrew
   vars:
-    homebrew_installed_packages: 
+    homebrew_installed_packages:
       - gnu-tar
 
-- ansible.builtin.import_role: 
+- ansible.builtin.import_role:
     name: ansible-role-graalvm
   vars:
     # specify the underlying java version
     # 11 or 17 or 19
-    graalvm_java_version: '17'
+    graalvm_java_version: "17"
 
     # GraalVM version number
-    graalvm_version: '22.3.0'
+    graalvm_version: "22.3.0"
 
     # Base installation directory for any GraalVM distribution
     graalvm_install_dir: /opt/graalvm
@@ -80,11 +80,17 @@
 - name: Export to Path
   ansible.builtin.lineinfile:
     path: ~/.profile
-    line: 'export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce/Contents/Home/bin:$PATH'
+    line: "export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce/Contents/Home/bin:$PATH"
     backup: yes
 
 - name: Set JAVA_HOME
   ansible.builtin.lineinfile:
     path: ~/.profile
-    line: 'export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce/Contents/Home'
+    line: "export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce/Contents/Home"
+    backup: yes
+
+- name: Test Containers
+  ansible.builtin.lineinfile:
+    path: ~/.profile
+    line: "export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock"
     backup: yes
