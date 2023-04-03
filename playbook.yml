@@ -27,3 +27,6 @@
     - role: android
       tags:
         - android
+    - role: gcp
+      tags:
+        - gcp

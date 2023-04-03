@@ -1,0 +1,5 @@
+- ansible.builtin.import_role:
+    name: geerlingguy.homebrew
+  vars:
+    homebrew_cask_apps:
+      - google-cloud-sdk
