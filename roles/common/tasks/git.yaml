@@ -1,0 +1,38 @@
+- name: "Verify some empty files"
+  file:
+    path: "{{ item }}"
+    state: touch
+  with_items:
+    - ~/.gitconfig
+    - ~/.gitignore
+- name: "Configure Git"
+  ansible.builtin.blockinfile:
+    path: ~/.gitconfig
+    block: |
+      [user]
+        email = {{ git.email }}
+        name = {{ git.name }}
+      [core]
+        excludesfile = ~/.gitignore
+- name: "Standard gitignore"
+  ansible.builtin.blockinfile:
+    path: ~/.gitignore
+    block: |
+      # Node
+      npm-debug.log
+
+      # Mac
+      .DS_Store
+
+      # WebStorm
+      .idea/
+
+      # VScode
+      .vsc
+
+      # vi
+      *~
+
+      # General
+      log/
+      *.log

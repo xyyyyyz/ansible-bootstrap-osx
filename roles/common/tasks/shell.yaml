@@ -1,0 +1,32 @@
+- ansible.builtin.import_role:
+    name: vaulttec.zsh
+  vars:
+    zsh_ohmy_theme: random
+    zsh_ohmy_custom_plugins:
+      - name: zsh-syntax-highlighting
+        repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+      - name: zsh-autosuggestions
+        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+    zsh_ohmy_plugins:
+      - git
+      - git-extras
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+- name: "Allow dot files to be visible"
+  ansible.builtin.shell: defaults write com.apple.Finder AppleShowAllFiles true
+- name: "Add alias to install profiles for aasdf"
+  lineinfile:
+    path: ~/.profile
+    line: alias asdf-install-plugins="cat ~/.tool-versions | cut -d' ' -f1 | grep '^[^\#]' | xargs -I {} sh -c 'asdf plugin add {} || true'"
+    backup: yes
+- name: "Add .profile to .zshrc"
+  lineinfile:
+    path: ~/.zshrc
+    line: source ~/.profile
+    backup: yes
+- name: "Check fzf"
+  shell: grep -c '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' ~/.zshrc || true
+  register: test_fzf
+- name: "Install fzf"
+  shell: $(brew --prefix)/opt/fzf/install
+  when: test_fzf.stdout == "0"

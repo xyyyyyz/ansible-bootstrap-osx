@@ -16,20 +16,6 @@
       - coreutils
       - yq
       - fzf
-- ansible.builtin.import_role:
-    name: vaulttec.zsh
-  vars:
-    zsh_ohmy_theme: random
-    zsh_ohmy_custom_plugins:
-      - name: zsh-syntax-highlighting
-        repo: "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-      - name: zsh-autosuggestions
-        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
-    zsh_ohmy_plugins:
-      - git
-      - git-extras
-      - zsh-syntax-highlighting
-      - zsh-autosuggestions
 - name: "Add python bin to profile"
   lineinfile:
     path: ~/.profile
@@ -46,59 +32,8 @@
     path: ~/.profile
     line: ". $(brew --prefix asdf)/libexec/asdf.sh"
     backup: yes
-- name: "Allow dot files to be visible"
-  ansible.builtin.shell: defaults write com.apple.Finder AppleShowAllFiles true
-- name: "Verify some empty files"
-  file:
-    path: "{{ item }}"
-    state: touch
-  with_items:
-    - ~/.gitconfig
-    - ~/.gitignore
-- name: "Configure Git"
-  ansible.builtin.blockinfile:
-    path: ~/.gitconfig
-    block: |
-      [user]
-        email = {{ git.email }}
-        name = {{ git.name }}
-      [core]
-        excludesfile = ~/.gitignore
-- name: "Standard gitignore"
-  ansible.builtin.blockinfile:
-    path: ~/.gitignore
-    block: |
-      # Node
-      npm-debug.log
 
-      # Mac
-      .DS_Store
-
-      # WebStorm
-      .idea/
-
-      # VScode
-      .vsc
-
-      # vi
-      *~
-
-      # General
-      log/
-      *.log
-- name: "Add alias to install profiles for aasdf"
-  lineinfile:
-    path: ~/.profile
-    line: alias asdf-install-plugins="cat ~/.tool-versions | cut -d' ' -f1 | grep '^[^\#]' | xargs -I {} sh -c 'asdf plugin add {} || true'"
-    backup: yes
-- name: "Add .profile to .zshrc"
-  lineinfile:
-    path: ~/.zshrc
-    line: source ~/.profile
-    backup: yes
-- name: "Check fzf"
-  shell: grep -c '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh' ~/.zshrc || true
-  register: test_fzf
-- name: "Install fzf"
-  shell: $(brew --prefix)/opt/fzf/install
-  when: test_fzf.stdout == "0"
+- name: git-tasks
+  ansible.builtin.include_tasks: git.yaml
+- name: shell-tasks
+  ansible.builtin.include_tasks: shell.yaml
