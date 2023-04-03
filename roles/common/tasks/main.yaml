@@ -4,6 +4,7 @@
     homebrew_cask_apps:
       - visual-studio-code
       - iterm2
+      - spectacle
     homebrew_installed_packages:
       - direnv
       - asdf
@@ -32,6 +33,10 @@
     path: ~/.profile
     line: ". $(brew --prefix asdf)/libexec/asdf.sh"
     backup: yes
+- name: Configure Specatacle
+  ansible.builtin.copy:
+    src: SpectacleShortcuts.json
+    dest: "~/Library/Application Support/Spectacle/Shortcuts.json"
 
 - name: git-tasks
   ansible.builtin.include_tasks: git.yaml
