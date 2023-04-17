@@ -1,5 +1,10 @@
-- ansible.builtin.import_role: 
+- ansible.builtin.import_role:
     name: stephdewit.nvm
   vars:
-    nvm_version: 'latest'
-    nvm_node_version: 'lts/hydrogen'
+    nvm_version: "latest"
+    nvm_node_version: "lts/hydrogen"
+- ansible.builtin.import_role:
+    name: geerlingguy.homebrew
+  vars:
+    homebrew_installed_packages:
+      - yarn
